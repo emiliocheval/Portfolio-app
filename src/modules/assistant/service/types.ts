@@ -14,6 +14,10 @@ export type AssistantResult =
   | { ok: true; stream: ReadableStream<Uint8Array> }
   | { ok: false; reason: 'filtered' | 'provider_error' | 'invalid_input'; message: string };
 
+export type IntentCheckResult =
+  | { allowed: true }
+  | { allowed: false; reason: string };
+
 export interface LLMProvider {
   stream(
     systemPrompt: string,
