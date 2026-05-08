@@ -17,6 +17,20 @@ const TAGLINE_PARTS = [
 const PROFILE =
   "Front-end developer with a strong eye for detail, user experience, and design quality. I have built and shipped my own design system from the ground up, worked closely with UI/UX on freelance projects, and I am used to owning the full journey from idea to delivery. I am structured, low-ego, and I thrive when collaborating closely with designers and back-end developers. I pick up new technologies quickly and am comfortable delivering under my own ownership.";
 
+const blobValues = [
+  "60% 40% 55% 45% / 55% 45% 55% 45%",
+  "40% 60% 45% 55% / 48% 52% 42% 58%",
+  "55% 45% 40% 60% / 60% 40% 55% 45%",
+  "45% 55% 60% 40% / 45% 55% 48% 52%",
+  "60% 40% 55% 45% / 55% 45% 55% 45%",
+];
+
+const blobTransition = {
+  duration: 9,
+  repeat: Infinity,
+  ease: "easeInOut" as const,
+};
+
 export function HeroSection() {
   return (
     <section
@@ -101,7 +115,7 @@ export function HeroSection() {
           >
             <a
               href="#projects"
-              className="inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 px-8 text-sm font-semibold text-white shadow-lg shadow-cyan-500/25 transition hover:brightness-110"
+              className="inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-8 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition hover:brightness-110"
             >
               View projects
             </a>
@@ -123,33 +137,46 @@ export function HeroSection() {
           <motion.div
             className="relative h-64 w-64 sm:h-72 sm:w-72"
             animate={{
+              borderRadius: blobValues,
               boxShadow: [
-                "0 0 0 0 rgba(34, 211, 238, 0.28)",
-                "0 0 0 14px rgba(34, 211, 238, 0)",
+                "0 0 0 0px rgba(16, 185, 129, 0.3)",
+                "0 0 0 16px rgba(16, 185, 129, 0)",
               ],
             }}
-            transition={{ duration: 2.4, repeat: Infinity, ease: "easeOut" }}
-            style={{ borderRadius: "9999px" }}
+            transition={{
+              borderRadius: blobTransition,
+              boxShadow: { duration: 2.4, repeat: Infinity, ease: "easeOut" },
+            }}
           >
             <motion.div
-              className="absolute inset-0 rounded-full"
+              className="absolute inset-0"
               style={{
                 background:
-                  "conic-gradient(from 0deg, #22d3ee, #818cf8, #e879f9, #22d3ee, #38bdf8, #a78bfa)",
+                  "conic-gradient(from 0deg, #10b981, #34d399, #6ee7b7, #10b981, #059669, #34d399)",
               }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+              animate={{
+                rotate: 360,
+                borderRadius: blobValues,
+              }}
+              transition={{
+                rotate: { duration: 12, repeat: Infinity, ease: "linear" },
+                borderRadius: blobTransition,
+              }}
             />
-            <div className="absolute inset-[4px] z-10 overflow-hidden rounded-full border border-zinc-800/90 bg-zinc-950">
+            <motion.div
+              className="absolute inset-1 z-10 overflow-hidden border border-zinc-800/90 bg-zinc-950"
+              animate={{ borderRadius: blobValues }}
+              transition={blobTransition}
+            >
               <Image
-                src="https://ui-avatars.com/api/?name=Emil+Conradsson&size=512&background=18181b&color=f4f4f5&bold=true&font-size=0.28"
+                src="/Profilepic.png"
                 alt="Emil Conradsson"
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 16rem, 18rem"
                 priority
               />
-            </div>
+            </motion.div>
           </motion.div>
         </motion.div>
       </div>
