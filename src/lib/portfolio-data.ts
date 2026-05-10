@@ -62,7 +62,7 @@ export const education: EducationItem[] = [
     description:
       "Two-year higher vocational programme covering React, Next.js, TypeScript, HTML/CSS and JavaScript, plus applied backend training.",
     href: "https://www.kyh.se",
-    tags: ["React", "Next.js", "TypeScript", "JavaScript", "HTML", "CSS"],
+    tags: ["React", "Next.js", "TypeScript", "JavaScript", "HTML", "CSS", "Node.js", "SQL", "PostgreSQL", "BaaS", "Supabase"],
   },
   {
     degree: "Business and administration",
@@ -80,8 +80,8 @@ export const coreSkills = [
   "Next.js",
   "TypeScript",
   "Tailwind",
-  "Figma",
-  "Design systems",
+  "PostgreSQL",
+  "Node.js",
 ] as const;
 
 export const experience: ExperienceItem[] = [
@@ -105,7 +105,6 @@ export const experience: ExperienceItem[] = [
       "Telegram Bot API",
       "Vercel",
       "Render",
-      "Luxon",
     ],
   },
   {
@@ -117,6 +116,6 @@ export const experience: ExperienceItem[] = [
       "Close collaboration with product on component structure and visual language.",
       "Reference available on request.",
     ],
-    tags: ["Figma", "React", "Next.js", "TypeScript"],
+    tags: ["Figma"],
   },
 ];
