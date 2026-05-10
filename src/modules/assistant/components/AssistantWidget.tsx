@@ -8,7 +8,7 @@ import { RiSparklingLine } from "react-icons/ri";
 
 export function AssistantWidget() {
   const [isOpen, setisOpen] = useState(false);
-  const { messages, send, streamingContent, error, isLoading } = useAssistant();
+  const { messages, send, streamingContent, isLoading } = useAssistant();
 
   return (
     <>
@@ -54,6 +54,20 @@ export function AssistantWidget() {
                   </div>
                 </div>
               ))}
+
+              {isLoading && (
+                <div className="mb-3 flex justify-start">
+                  <div className="max-w-[80%] rounded-xl bg-zinc-800 px-4 py-2.5 text-sm text-zinc-100">
+                    {streamingContent || (
+                      <span className="flex gap-1">
+                        <span className="animate-bounce [animation-delay:0ms]">•</span>
+                        <span className="animate-bounce [animation-delay:150ms]">•</span>
+                        <span className="animate-bounce [animation-delay:300ms]">•</span>
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
             <ChatInput onSend={send} disabled={isLoading} />
           </div>
