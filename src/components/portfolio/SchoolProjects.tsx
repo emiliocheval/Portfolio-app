@@ -26,7 +26,7 @@ function SchoolProjectCard({ project, index }: { project: SchoolProject; index: 
       <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900 text-zinc-400 transition group-hover:border-zinc-700 group-hover:text-white">
         {icon}
       </div>
-      <h3 className="text-xl font-bold text-white transition group-hover:text-indigo-300">
+      <h3 className="text-xl font-bold text-white transition group-hover:text-blue-300">
         {project.title}
       </h3>
       <p className="mt-3 flex-1 text-sm leading-relaxed text-zinc-400">
@@ -78,7 +78,7 @@ export function SchoolProjects() {
                       href={e.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="hover:text-indigo-300"
+                      className="hover:text-blue-300"
                     >
                       {e.degree}
                     </a>

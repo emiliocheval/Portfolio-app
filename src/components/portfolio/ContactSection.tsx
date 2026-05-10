@@ -17,14 +17,14 @@ export function ContactSection() {
         <p className="mt-4 text-sm text-zinc-400">
           <a
             href="mailto:Emil.conradsson1@gmail.com"
-            className="text-indigo-400/90 underline-offset-4 hover:text-indigo-300 hover:underline"
+            className="text-blue-400/90 underline-offset-4 hover:text-blue-300 hover:underline"
           >
             Emil.conradsson1@gmail.com
           </a>
           {" · "}
           <a
             href="tel:+46765541507"
-            className="text-indigo-400/90 underline-offset-4 hover:text-indigo-300 hover:underline"
+            className="text-blue-400/90 underline-offset-4 hover:text-blue-300 hover:underline"
           >
             +46 765 541 507
           </a>
@@ -42,7 +42,7 @@ export function ContactSection() {
             <input
               name="name"
               required
-              className="rounded-xl border border-zinc-800 bg-zinc-900/60 px-4 py-3 text-zinc-100 outline-none ring-indigo-500/40 transition placeholder:text-zinc-600 focus:border-indigo-500/50 focus:ring-2"
+              className="rounded-xl border border-zinc-800 bg-zinc-900/60 px-4 py-3 text-zinc-100 outline-none ring-blue-500/40 transition placeholder:text-zinc-600 focus:border-blue-500/50 focus:ring-2"
               placeholder="Your name"
             />
           </label>
@@ -52,7 +52,7 @@ export function ContactSection() {
               name="email"
               type="email"
               required
-              className="rounded-xl border border-zinc-800 bg-zinc-900/60 px-4 py-3 text-zinc-100 outline-none ring-indigo-500/40 transition placeholder:text-zinc-600 focus:border-indigo-500/50 focus:ring-2"
+              className="rounded-xl border border-zinc-800 bg-zinc-900/60 px-4 py-3 text-zinc-100 outline-none ring-blue-500/40 transition placeholder:text-zinc-600 focus:border-blue-500/50 focus:ring-2"
               placeholder="you@example.com"
             />
           </label>
@@ -62,13 +62,13 @@ export function ContactSection() {
               name="message"
               required
               rows={5}
-              className="resize-y rounded-xl border border-zinc-800 bg-zinc-900/60 px-4 py-3 text-zinc-100 outline-none ring-indigo-500/40 transition placeholder:text-zinc-600 focus:border-indigo-500/50 focus:ring-2"
+              className="resize-y rounded-xl border border-zinc-800 bg-zinc-900/60 px-4 py-3 text-zinc-100 outline-none ring-blue-500/40 transition placeholder:text-zinc-600 focus:border-blue-500/50 focus:ring-2"
               placeholder="Write your message here"
             />
           </label>
           <button
             type="submit"
-            className="mt-2 inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:brightness-110"
+            className="mt-2 inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-violet-500 text-sm font-semibold text-white shadow-lg shadow-blue-500/20 transition hover:brightness-110"
           >
             {sent ? "Thanks — your message was recorded" : "Send message"}
           </button>

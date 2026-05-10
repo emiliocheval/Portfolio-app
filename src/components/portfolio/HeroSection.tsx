@@ -115,7 +115,7 @@ export function HeroSection() {
           >
             <a
               href="#projects"
-              className="inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 px-8 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition hover:brightness-110"
+              className="inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-violet-500 px-8 text-sm font-semibold text-white shadow-lg shadow-blue-500/25 transition hover:brightness-110"
             >
               View projects
             </a>
@@ -139,8 +139,8 @@ export function HeroSection() {
             animate={{
               borderRadius: blobValues,
               boxShadow: [
-                "0 0 0 0px rgba(16, 185, 129, 0.3)",
-                "0 0 0 16px rgba(16, 185, 129, 0)",
+                "0 0 0 0px rgba(59, 130, 246, 0.3)",
+                "0 0 0 16px rgba(59, 130, 246, 0)",
               ],
             }}
             transition={{
@@ -152,7 +152,7 @@ export function HeroSection() {
               className="absolute inset-0"
               style={{
                 background:
-                  "conic-gradient(from 0deg, #10b981, #34d399, #6ee7b7, #10b981, #059669, #34d399)",
+                  "conic-gradient(from 0deg, #3b82f6, #60a5fa, #93c5fd, #3b82f6, #2563eb, #60a5fa)",
               }}
               animate={{
                 rotate: 360,

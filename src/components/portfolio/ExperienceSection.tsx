@@ -16,7 +16,7 @@ export function ExperienceSection() {
         />
         <div className="relative">
           <div
-            className="absolute left-[7px] top-2 bottom-2 w-px bg-gradient-to-b from-indigo-500/50 via-indigo-400/30 to-transparent sm:left-3"
+            className="absolute left-[7px] top-2 bottom-2 w-px bg-gradient-to-b from-blue-500/50 via-blue-400/30 to-transparent sm:left-3"
             aria-hidden
           />
           <ol className="flex flex-col gap-14">
@@ -30,10 +30,10 @@ export function ExperienceSection() {
                 className="relative pl-10 sm:pl-14"
               >
                 <span
-                  className="absolute left-0 top-1.5 flex h-4 w-4 items-center justify-center rounded-full border-2 border-indigo-400/80 bg-zinc-950 sm:left-1"
+                  className="absolute left-0 top-1.5 flex h-4 w-4 items-center justify-center rounded-full border-2 border-blue-400/80 bg-zinc-950 sm:left-1"
                   aria-hidden
                 >
-                  <span className="h-1.5 w-1.5 rounded-full bg-indigo-400" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-blue-400" />
                 </span>
                 <div className="rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-6 sm:p-8">
                   <h3 className="text-xl font-bold text-white sm:text-2xl">
@@ -45,7 +45,7 @@ export function ExperienceSection() {
                         href={job.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-medium text-zinc-300 hover:text-indigo-300"
+                        className="font-medium text-zinc-300 hover:text-blue-300"
                       >
                         {job.company}
                       </a>
@@ -59,7 +59,7 @@ export function ExperienceSection() {
                   <ul className="mt-4 space-y-2 text-zinc-400">
                     {job.bullets.map((b) => (
                       <li key={b} className="flex gap-2 text-sm leading-relaxed">
-                        <span className="shrink-0 text-indigo-400/90" aria-hidden>
+                        <span className="shrink-0 text-blue-400/90" aria-hidden>
                           ▹
                         </span>
                         <span>{b}</span>
