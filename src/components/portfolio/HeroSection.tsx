@@ -127,7 +127,7 @@ export function HeroSection() {
               <FiGithub size={18} />
             </a>
             <a
-              href="/Emil-Conradsson-Resume.docx"
+              href="/Emil_Conradsson_Resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Resume"

@@ -42,7 +42,7 @@ export function SiteHeader() {
         <LiveClock />
         <nav className="flex items-center gap-6">
           <a
-            href="/Emil-Conradsson-Resume.docx"
+            href="/Emil_Conradsson_Resume.pdf"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-base font-medium text-zinc-300 transition-colors hover:text-white"
