@@ -68,7 +68,7 @@ export function ContactSection() {
           </label>
           <button
             type="submit"
-            className="mt-2 inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-sky-500 to-violet-500 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:brightness-110"
+            className="mt-2 inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-sky-400 to-sky-600 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition hover:brightness-110"
           >
             {sent ? "Thanks — your message was recorded" : "Send message"}
           </button>

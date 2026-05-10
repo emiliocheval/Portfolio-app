@@ -96,7 +96,7 @@ export const schoolProjects: SchoolProject[] = [
     title: "Headless e-commerce platform",
     description:
       "Full-stack e-commerce platform in Next.js and TypeScript with Sanity as a headless CMS and Tailwind CSS, focused on usability and scalability.",
-    href: "https://vercel.com/emiliochevals-projects/lumina-ecommerce-nextjs",
+    href: "https://lumina-ecommerce-nextjs.vercel.app/",
     tags: ["React", "Next.js", "TypeScript", "Tailwind", "Sanity"],
   },
 ];
