@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { FiGithub, FiFileText } from "react-icons/fi";
 
 function LiveClock() {
   const [now, setNow] = useState<Date | null>(null);
@@ -33,30 +34,31 @@ export function SiteHeader() {
     <header className="fixed top-0 z-50 w-full border-b border-zinc-800/80 bg-zinc-950/70 backdrop-blur-md">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-md focus:bg-cyan-500 focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-zinc-950"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-60 focus:rounded-md focus:bg-cyan-500 focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-zinc-950"
       >
         Skip to main content
       </a>
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
         <LiveClock />
-        <nav className="flex flex-wrap items-center justify-end gap-4 text-sm font-medium text-zinc-300 sm:gap-6">
-          <a href="#" className="transition-colors hover:text-white">
+        <nav className="flex items-center gap-6">
+          <a
+            href="/Emil-Conradsson-Resume.docx"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-base font-medium text-zinc-300 transition-colors hover:text-white"
+          >
+            <FiFileText size={17} />
             Resume
           </a>
           <a
-            href="mailto:Emil.conradsson1@gmail.com"
-            className="transition-colors hover:text-white"
+            href="https://github.com/emiliocheval"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-base font-medium text-zinc-300 transition-colors hover:text-white"
+            aria-label="GitHub"
           >
-            Email
-          </a>
-          <a
-            href="tel:+46765541507"
-            className="transition-colors hover:text-white"
-          >
-            Phone
-          </a>
-          <a href="#contact" className="transition-colors hover:text-white">
-            Contact
+            <FiGithub size={17} />
+            GitHub
           </a>
         </nav>
       </div>
