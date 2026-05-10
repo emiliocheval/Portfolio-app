@@ -62,7 +62,7 @@ export const education: EducationItem[] = [
     description:
       "Two-year higher vocational programme covering React, Next.js, TypeScript, HTML/CSS and JavaScript, plus applied backend training.",
     href: "https://www.kyh.se",
-    tags: ["React", "Next.js", "TypeScript", "JavaScript", "HTML", "CSS", "Node.js", "SQL", "PostgreSQL", "BaaS", "Supabase"],
+    tags: ["React", "Next.js", "TypeScript", "JavaScript", "HTML", "CSS", "Tailwind", "Node.js", "SQL", "PostgreSQL", "BaaS", "Supabase", "Firebase"],
   },
   {
     degree: "Business and administration",

@@ -75,8 +75,7 @@ export function InteractiveBackground() {
       const pts = pointsRef.current;
       const t = frameRef.current * 0.002;
 
-      ctx.fillStyle = "rgba(18, 18, 24, 0.18)";
-      ctx.fillRect(0, 0, w, h);
+      ctx.clearRect(0, 0, w, h);
 
       for (const p of pts) {
         p.x += p.vx;
