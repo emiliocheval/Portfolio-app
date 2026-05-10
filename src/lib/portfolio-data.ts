@@ -3,6 +3,7 @@ export type Project = {
   description: string;
   href: string;
   imageSeed: string;
+  image?: string;
   tags: string[];
   badge?: string;
 };
@@ -27,11 +28,12 @@ export type ExperienceItem = {
 
 export const featuredProjects: Project[] = [
   {
-    title: "chatos.chat",
+    title: "ChatOS.chat",
     description:
       "Personal SaaS product — live with active users. Built and shipped a full-stack TypeScript app in React and Next.js, owning the product end to end from architecture to deployment. Created a complete design system in code with thoughtful interaction states and a strong visual language. Worked closely across design and implementation. UX focus throughout: draggable window system, contextual navigation, and a modern, intuitive interface.",
     href: "https://chatos.chat",
     imageSeed: "chatos",
+    image: "/ChatOS-thumbnail.png",
     badge: "Personal project · 2024 – present",
     tags: [
       "React",
@@ -40,17 +42,8 @@ export const featuredProjects: Project[] = [
       "Tailwind",
       "Supabase",
       "PostgreSQL",
-      "Prisma",
+      "Zustand",
     ],
-  },
-  {
-    title: "Headless e-commerce platform",
-    description:
-      "Full-stack e-commerce platform in Next.js and TypeScript with Sanity as a headless CMS and Tailwind CSS, focused on usability and scalability.",
-    href: "#",
-    imageSeed: "ecomheadless",
-    badge: "Personal project · 2024 – 2025",
-    tags: ["React", "Next.js", "TypeScript", "Tailwind", "Sanity"],
   },
 ];
 
@@ -83,6 +76,30 @@ export const coreSkills = [
   "PostgreSQL",
   "Node.js",
 ] as const;
+
+export type SchoolProject = {
+  title: string;
+  description: string;
+  href?: string;
+  tags: string[];
+};
+
+export const schoolProjects: SchoolProject[] = [
+  {
+    title: "Event app",
+    description:
+      "Event management system built with React/Next.js/Tailwind. Leverages an API created in a group project.",
+    href: "https://github.com/emiliocheval/eventfrontend-next-js",
+    tags: ["React", "Next.js", "JavaScript", "Tailwind", "Clerk", "Firebase"],
+  },
+  {
+    title: "Headless e-commerce platform",
+    description:
+      "Full-stack e-commerce platform in Next.js and TypeScript with Sanity as a headless CMS and Tailwind CSS, focused on usability and scalability.",
+    href: "https://vercel.com/emiliochevals-projects/lumina-ecommerce-nextjs",
+    tags: ["React", "Next.js", "TypeScript", "Tailwind", "Sanity"],
+  },
+];
 
 export const experience: ExperienceItem[] = [
   {

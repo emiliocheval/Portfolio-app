@@ -10,7 +10,7 @@ function isExternalHref(href: string) {
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const reverse = index % 2 === 1;
-  const src = `https://picsum.photos/seed/${project.imageSeed}/960/600`;
+  const src = project.image ?? `https://picsum.photos/seed/${project.imageSeed}/960/600`;
   const external = isExternalHref(project.href);
 
   const mediaClassName =

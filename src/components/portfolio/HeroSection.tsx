@@ -115,7 +115,7 @@ export function HeroSection() {
           >
             <a
               href="#projects"
-              className="inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-8 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition hover:brightness-110"
+              className="inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 px-8 text-sm font-semibold text-white shadow-lg shadow-indigo-500/25 transition hover:brightness-110"
             >
               View projects
             </a>

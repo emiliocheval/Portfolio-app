@@ -14,7 +14,7 @@ export function AssistantWidget() {
       <button
         type="button"
         onClick={() => setisOpen((prev) => !prev)}
-        className="fixed bottom-6 right-6 z-50 rounded-full bg-emerald-500 px-4 py-2 text-white"
+        className="fixed bottom-6 right-6 z-50 rounded-full bg-indigo-500 px-4 py-2 text-white"
       >
         {isOpen ? "Close Assistant" : "Open Assistant"}
       </button>
@@ -29,7 +29,7 @@ export function AssistantWidget() {
                   className={`mb-3 flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
-                    className={`max-w-[80%] rounded-xl px-4 py-2.5 text-sm ${msg.role === "user" ? "bg-emerald-500 text-white" : "bg-zinc-800 text-zinc-100"}`}
+                    className={`max-w-[80%] rounded-xl px-4 py-2.5 text-sm ${msg.role === "user" ? "bg-indigo-500 text-white" : "bg-zinc-800 text-zinc-100"}`}
                   >
                     {msg.content}
                   </div>
