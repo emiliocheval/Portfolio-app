@@ -9,16 +9,13 @@ interface AssistantInfoProps {
 export function AssistantInfo({ onClose }: AssistantInfoProps) {
   return (
     <div className="fixed inset-0 z-60 flex items-center justify-center p-4">
-      {/* backdrop */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-sm"
         onClick={onClose}
       />
 
-      {/* panel */}
       <div className="relative z-10 flex max-h-[80vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/95 shadow-2xl">
 
-        {/* header */}
         <div className="flex items-center justify-between border-b border-zinc-800 px-6 py-4">
           <h2 className="text-base font-bold text-white">How this AI assistant works</h2>
           <button
@@ -30,47 +27,51 @@ export function AssistantInfo({ onClose }: AssistantInfoProps) {
           </button>
         </div>
 
-        {/* content */}
         <div className="flex flex-col gap-6 overflow-y-auto p-6 [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.1)_transparent]">
 
           <p className="text-sm leading-relaxed text-zinc-400">
-            This assistant is not a third-party widget. It was built from scratch as a fully isolated module inside this portfolio — designed with the same architectural patterns used in production systems.
+            This assistant was built from scratch as a fully isolated module — not a third-party widget. It uses the same architectural patterns you&apos;d find in a production system: layered guardrails, a swappable provider interface, server-side streaming, and strict module boundaries.
           </p>
 
-          <Section title="What it does">
-            Answers questions about Emil&apos;s background, projects, skills, and experience. Questions outside that scope are filtered before they ever reach the AI model.
-          </Section>
-
-          <Section title="Three-layer guardrail system">
-            Every message passes through an intent filter before any API call is made:
+          <Section title="Four-layer guardrail system">
+            Every message is validated before any API call is made — off-topic messages are rejected instantly at zero cost.
             <List items={[
-              "Structural — rejects empty or oversized messages",
-              "Pattern matching — blocks off-topic keywords and phrases via regex",
-              "Topic allowlist — requires at least one portfolio-related keyword",
+              "Structural — rejects empty messages or anything over 500 characters",
+              "Pattern matching — regex blocklist for code generation requests, debugging, and explicit content",
+              "Topic allowlist — message must contain at least one portfolio-related keyword",
+              "System prompt — the model itself is instructed to refuse out-of-scope questions and ignore prompt injection attempts",
             ]} />
-            A fourth guardrail lives inside the model itself — the system prompt instructs it to refuse anything outside scope even if the static filter passes.
-          </Section>
-
-          <Section title="Streaming responses">
-            Responses stream token by token using the Web ReadableStream API. The Route Handler returns a raw streaming Response. The UI reads chunks via <Code>getReader()</Code> and appends them to state on each tick — the same pattern used by ChatGPT.
           </Section>
 
           <Section title="Provider abstraction">
-            The AI layer sits behind an <Code>LLMProvider</Code> interface. The current implementation uses DeepSeek via an OpenAI-compatible SDK. Swapping to a different model means writing one new file — nothing else in the codebase changes.
+            The AI layer sits behind a <Code>LLMProvider</Code> interface with a single <Code>stream()</Code> method. The current implementation uses DeepSeek via an OpenAI-compatible SDK — chosen for cost efficiency and easy swappability. Switching to Anthropic or OpenAI means writing one new file. Nothing else changes.
+          </Section>
+
+          <Section title="Streaming">
+            Responses stream token by token using the Web ReadableStream API. The Route Handler returns a raw streaming <Code>Response</Code>. The <Code>useAssistant</Code> hook reads chunks via <Code>getReader()</Code> and appends them to state on each tick — the same pattern used by ChatGPT. An <Code>AbortController</Code> cancels in-flight requests when a new message is sent.
+          </Section>
+
+          <Section title="Module boundaries">
+            The <Code>service/</Code> layer has zero imports from React or Next.js — pure TypeScript, independently testable. The only integration point between the module and the framework is a single Route Handler at <Code>/api/assistant</Code>. The UI never calls the service directly.
+          </Section>
+
+          <Section title="Markdown rendering">
+            DeepSeek responses are markdown. <Code>react-markdown</Code> parses them with a custom component map that applies styles per element — paragraphs, headings, bullet lists, inline code, and code blocks all render correctly.
+          </Section>
+
+          <Section title="What's intentionally omitted">
+            Rate limiting is not implemented — for a portfolio this is acceptable. In production it would sit at the Route Handler layer, keyed on IP or session, before the intent filter runs.
           </Section>
 
           <Section title="Tech used">
             <List items={[
-              "Next.js 16 App Router — Route Handler as the only API boundary",
-              "DeepSeek — LLM provider via OpenAI-compatible API",
+              "Next.js 16 App Router — Route Handler as the single API boundary",
+              "DeepSeek — LLM via OpenAI-compatible API",
               "TypeScript discriminated unions — typed result on every code path",
-              "AbortController — cancels in-flight requests on new message",
-              "react-markdown — formats model output as structured HTML",
+              "AbortController — stream cancellation on new message",
+              "react-markdown — structured markdown rendering",
+              "Framer Motion — UI animations",
             ]} />
-          </Section>
-
-          <Section title="Module boundaries">
-            The service layer has zero imports from React or Next.js. It is pure TypeScript — independently testable and fully decoupled from the UI. The only integration point is a single Route Handler at <Code>/api/assistant</Code>.
           </Section>
 
         </div>
