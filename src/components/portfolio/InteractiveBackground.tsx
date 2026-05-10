@@ -75,27 +75,35 @@ export function InteractiveBackground() {
       const pts = pointsRef.current;
       const t = frameRef.current * 0.002;
 
-      ctx.fillStyle = "rgba(9, 9, 11, 0.22)";
+      ctx.fillStyle = "rgba(18, 18, 24, 0.18)";
       ctx.fillRect(0, 0, w, h);
-
-      const px = pointer.current.active ? pointer.current.x : 0.5 + Math.sin(t) * 0.15;
-      const py = pointer.current.active ? pointer.current.y : 0.45 + Math.cos(t * 0.9) * 0.12;
 
       for (const p of pts) {
         p.x += p.vx;
         p.y += p.vy;
         if (p.x < 0 || p.x > 1) p.vx *= -1;
         if (p.y < 0 || p.y > 1) p.vy *= -1;
-        const dx = px - p.x;
-        const dy = py - p.y;
-        const pull = pointer.current.active ? 0.00012 : 0.00004;
-        p.vx += dx * pull;
-        p.vy += dy * pull;
-        p.vx *= 0.985;
-        p.vy *= 0.985;
+
+        if (pointer.current.active) {
+          const dx = pointer.current.x - p.x;
+          const dy = pointer.current.y - p.y;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 0.3 && dist > 0.001) {
+            const nx = dx / dist;
+            const ny = dy / dist;
+            if (dist < 0.2) {
+              const force = (1 - dist / 0.2) * 0.000018;
+              p.vx += nx * force;
+              p.vy += ny * force;
+            }
+          }
+        }
+
+        p.vx *= 0.98;
+        p.vy *= 0.98;
       }
 
-      const distTh = pointer.current.active ? 0.11 : 0.085;
+      const distTh = pointer.current.active ? 0.1 : 0.085;
       ctx.lineWidth = 1 * dpr;
 
       for (let i = 0; i < pts.length; i++) {
@@ -107,7 +115,7 @@ export function InteractiveBackground() {
           const d = Math.hypot(dx, dy);
           if (d < distTh) {
             const alpha = (1 - d / distTh) * 0.35;
-            ctx.strokeStyle = `rgba(56, 189, 248, ${alpha})`;
+            ctx.strokeStyle = `rgba(200, 200, 210, ${alpha})`;
             ctx.beginPath();
             ctx.moveTo(a.x * w, a.y * h);
             ctx.lineTo(b.x * w, b.y * h);
@@ -118,7 +126,7 @@ export function InteractiveBackground() {
 
       for (const p of pts) {
         const alpha = 0.35 + Math.sin(t + p.x * 8) * 0.12;
-        ctx.fillStyle = `rgba(167, 139, 250, ${alpha})`;
+        ctx.fillStyle = `rgba(210, 210, 220, ${alpha})`;
         ctx.beginPath();
         ctx.arc(p.x * w, p.y * h, 1.2 * dpr, 0, Math.PI * 2);
         ctx.fill();
