@@ -48,8 +48,8 @@ export function InteractiveBackground() {
       pts.push({
         x: Math.random(),
         y: Math.random(),
-        vx: (Math.random() - 0.5) * 0.00035,
-        vy: (Math.random() - 0.5) * 0.00035,
+        vx: (Math.random() - 0.5) * 0.0014,
+        vy: (Math.random() - 0.5) * 0.0014,
       });
     }
     pointsRef.current = pts;
@@ -91,7 +91,13 @@ export function InteractiveBackground() {
           if (dist < 0.3 && dist > 0.001) {
             const nx = dx / dist;
             const ny = dy / dist;
-            if (dist < 0.2) {
+            if (dist < 0.06) {
+              // bounce away gently when too close
+              const force = (0.06 - dist) / 0.06 * 0.0004;
+              p.vx -= nx * force;
+              p.vy -= ny * force;
+            } else if (dist < 0.2) {
+              // weak pull in the outer zone
               const force = (1 - dist / 0.2) * 0.000018;
               p.vx += nx * force;
               p.vy += ny * force;
