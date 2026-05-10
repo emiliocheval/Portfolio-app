@@ -1,6 +1,7 @@
 "use client";
 
 import { MarkdownMessage } from "./MarkdownMessage";
+import { AssistantInfo } from "./AssistantInfo";
 import { useState } from "react";
 import { useAssistant } from "../hooks/useAssistant";
 import { ChatInput } from "./ChatInput";
@@ -9,6 +10,7 @@ import { RiSparklingLine } from "react-icons/ri";
 
 export function AssistantWidget() {
   const [isOpen, setisOpen] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
   const { messages, send, streamingContent, isLoading } = useAssistant();
 
   return (
@@ -35,18 +37,22 @@ export function AssistantWidget() {
       </button>
 
       {isOpen && (
-        <div className="fixed bottom-20 right-6 z-50 flex h-[480px] w-[28rem] flex-col rounded-2xl border border-zinc-800 bg-zinc-900/80 shadow-2xl backdrop-blur-md">
+        <div className="fixed bottom-20 right-6 z-50 flex h-[480px] w-[28rem] flex-col overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/80 shadow-2xl backdrop-blur-md">
           <div className="flex items-center gap-2 border-b border-zinc-800 px-4 py-3">
             <RiSparklingLine size={16} className="text-sky-400" />
-            <span className="text-sm font-semibold text-white">
-              AI Assistant
-            </span>
-            <span className="ml-auto rounded-full bg-sky-500/20 px-1.5 py-0.5 text-xs font-semibold text-sky-300">
-              BETA
-            </span>
+            <span className="text-sm font-semibold text-white">AI Assistant</span>
+            <span className="rounded-full bg-sky-500/20 px-1.5 py-0.5 text-xs font-semibold text-sky-300">BETA</span>
+            <button
+              type="button"
+              onClick={() => setShowInfo((v) => !v)}
+              className="ml-auto flex h-6 w-6 items-center justify-center rounded-full border border-zinc-700 text-xs text-zinc-400 transition hover:border-zinc-500 hover:text-white"
+              aria-label="How this works"
+            >
+              ?
+            </button>
           </div>
-          <div className="flex h-full flex-col">
-            <div className="flex-1 overflow-y-auto p-4 scroll-smooth [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.15)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb:hover]:bg-white/20">
+          <div className="flex min-h-0 flex-1 flex-col">
+            <div className="min-h-0 flex-1 overflow-y-auto p-4 scroll-smooth [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.15)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb:hover]:bg-white/20">
               {messages.map((msg, idx) => (
                 <div
                   key={idx}
@@ -80,6 +86,8 @@ export function AssistantWidget() {
           </div>
         </div>
       )}
+
+      {showInfo && <AssistantInfo onClose={() => setShowInfo(false)} />}
     </>
   );
 }
