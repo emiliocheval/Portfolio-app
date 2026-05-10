@@ -20,9 +20,9 @@ export function AssistantWidget() {
       </button>
 
       {isOpen && (
-        <div className="fixed bottom-20 right-6 z-50">
+        <div className="fixed bottom-20 right-6 z-50 w-96 w-[28rem] sm:w-[32rem] h-[480px] flex flex-col flex-1 rounded-2xl border border-zinc-800 bg-zinc-900/80 backdrop-blur-md shadow-2xl">
           <div className="flex h-full flex-col">
-            <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex-1 overflow-y-auto p-4 scroll-smooth [scrollbar-width:thin] [scrollbar-color:rgba(255,255,255,0.15)_transparent] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-white/10 [&::-webkit-scrollbar-thumb:hover]:bg-white/20">
               {messages.map((msg, idx) => (
                 <div
                   key={idx}
