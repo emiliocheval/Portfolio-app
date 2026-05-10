@@ -2,9 +2,16 @@ import { createAssistantService } from '@/modules/assistant/service/assistant-se
 import { createDeepSeekProvider } from '@/modules/assistant/service/providers/deepseek';
 import type { ChatRequest } from '@/modules/assistant/service/types';
 
-const service = createAssistantService(
-  createDeepSeekProvider(process.env.DEEPSEEK_API_KEY!),
-);
+let service: ReturnType<typeof createAssistantService> | null = null;
+
+function getService() {
+  if (!service) {
+    service = createAssistantService(
+      createDeepSeekProvider(process.env.DEEPSEEK_API_KEY!),
+    );
+  }
+  return service;
+}
 
 export async function POST(request: Request) {
   let body: ChatRequest;
@@ -18,7 +25,7 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Invalid request body' }, { status: 400 });
   }
 
-  const result = await service.chat(body, request.signal);
+  const result = await getService().chat(body, request.signal);
 
   if (!result.ok) {
     const status = result.reason === 'filtered' ? 403 : 500;
