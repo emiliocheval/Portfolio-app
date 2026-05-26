@@ -1,0 +1,109 @@
+import OpenAI from 'openai';
+import { listToolsForLLM, dispatch } from '@/modules/github/service/tool-registry';
+import { GitHubAPIError, formatGitHubError } from '@/modules/github/service/types';
+
+const client = new OpenAI({
+  apiKey: process.env.DEEPSEEK_API_KEY,
+  baseURL: 'https://api.deepseek.com',
+});
+
+const MAX_ITERATIONS = 5;
+
+function buildSystemPrompt() {
+  return `You are a GitHub assistant embedded in Emil Conradsson's portfolio website.
+You have tools that fetch live data from his public GitHub profile (username: ${process.env.GITHUB_USERNAME}).
+Always use the tools to get real data — never assume or invent repo names or details.
+Keep answers concise and recruiter-friendly. Highlight interesting technical decisions where relevant.`;
+}
+
+export async function POST(req: Request) {
+  let parsed: { message: string; history: OpenAI.Chat.ChatCompletionMessageParam[] };
+  try {
+    parsed = await req.json();
+  } catch {
+    return Response.json({ error: 'Invalid JSON' }, { status: 400 });
+  }
+
+  if (typeof parsed.message !== 'string') {
+    return Response.json({ error: 'Invalid request body' }, { status: 400 });
+  }
+
+  const tools = listToolsForLLM();
+
+  let messages: OpenAI.Chat.ChatCompletionMessageParam[] = [
+    { role: 'system', content: buildSystemPrompt() },
+    ...(parsed.history ?? []),
+    { role: 'user', content: parsed.message },
+  ];
+
+  // Agentic loop: let the LLM call tools until it has enough data to answer
+  for (let i = 0; i < MAX_ITERATIONS; i++) {
+    const response = await client.chat.completions.create({
+      model: 'deepseek-chat',
+      messages,
+      tools,
+      tool_choice: 'auto',
+      stream: false,
+    });
+
+    const choice = response.choices[0];
+    messages.push(choice.message);
+
+    if (choice.finish_reason !== 'tool_calls') break;
+
+    // Execute all tool calls in parallel
+    const toolResults = await Promise.all(
+      (choice.message.tool_calls ?? []).filter((c) => c.type === 'function').map(async (call) => {
+        try {
+          const args = JSON.parse(call.function.arguments);
+          const result = await dispatch(call.function.name, args);
+          return {
+            tool_call_id: call.id,
+            role: 'tool' as const,
+            content: JSON.stringify(result),
+          };
+        } catch (err) {
+          const msg =
+            err instanceof GitHubAPIError
+              ? formatGitHubError(err.error)
+              : 'Tool execution failed.';
+          return { tool_call_id: call.id, role: 'tool' as const, content: msg };
+        }
+      }),
+    );
+
+    messages.push(...toolResults);
+  }
+
+  // Stream the final answer once all tool calls are resolved
+  const llmStream = await client.chat.completions.create({
+    model: 'deepseek-chat',
+    messages,
+    stream: true,
+  });
+
+  const encoder = new TextEncoder();
+  const responseStream = new ReadableStream<Uint8Array>({
+    async start(controller) {
+      try {
+        for await (const chunk of llmStream) {
+          const text = chunk.choices[0]?.delta?.content ?? '';
+          if (text) controller.enqueue(encoder.encode(text));
+        }
+        controller.close();
+      } catch (err) {
+        controller.error(err);
+      }
+    },
+    cancel() {
+      llmStream.controller.abort();
+    },
+  });
+
+  return new Response(responseStream, {
+    headers: {
+      'Content-Type': 'text/plain; charset=utf-8',
+      'X-Content-Type-Options': 'nosniff',
+    },
+  });
+}
