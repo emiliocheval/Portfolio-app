@@ -36,7 +36,8 @@ export async function POST(req: Request) {
     { role: 'user', content: parsed.message },
   ];
 
-  // Agentic loop: let the LLM call tools until it has enough data to answer
+  // Agentic loop: resolve tool calls until the LLM is ready to give a final answer.
+  // We do NOT push the final assistant message — the streaming call below generates it fresh.
   for (let i = 0; i < MAX_ITERATIONS; i++) {
     const response = await client.chat.completions.create({
       model: 'deepseek-chat',
@@ -47,9 +48,10 @@ export async function POST(req: Request) {
     });
 
     const choice = response.choices[0];
-    messages.push(choice.message);
 
-    if (choice.finish_reason !== 'tool_calls') break;
+    if (choice.finish_reason !== 'tool_calls') break; // ready to answer — don't push
+
+    messages.push(choice.message); // only push tool-call messages
 
     // Execute all tool calls in parallel
     const toolResults = await Promise.all(
