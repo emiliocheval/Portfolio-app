@@ -8,6 +8,7 @@ import { SchoolProjects } from "@/components/portfolio/SchoolProjects";
 import { SecretRecipe } from "@/components/portfolio/SecretRecipe";
 import { SiteFooter } from "@/components/portfolio/SiteFooter";
 import { SiteHeader } from "@/components/portfolio/SiteHeader";
+import { GitHubExplorer } from "@/modules/github/components/GitHubExplorer";
 export default function Home() {
   return (
     <>
@@ -20,7 +21,8 @@ export default function Home() {
         <SecretRecipe />
         <CoreSkills />
         <ExperienceSection />
-<ContactSection />
+        <GitHubExplorer />
+        <ContactSection />
       </main>
       <SiteFooter />
     </>

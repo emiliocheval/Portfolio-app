@@ -9,7 +9,7 @@ export async function githubFetch(path: string, token?: string): Promise<unknown
       Accept: 'application/vnd.github+json',
       'X-GitHub-Api-Version': '2022-11-28',
     },
-    next: { revalidate: 300 },
+    cache: 'no-store',
   });
 
   if (res.status === 401) {

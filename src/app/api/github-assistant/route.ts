@@ -74,7 +74,7 @@ export async function POST(req: Request) {
       model: 'deepseek-chat',
       messages,
       tools,
-      tool_choice: 'auto',
+      tool_choice: i === 0 ? 'required' : 'auto',
       stream: false,
     });
 
