@@ -1,4 +1,5 @@
 import { githubFetch } from '../github-client';
+import { getGitHubConfig } from '../github-config';
 import type { GitHubTool } from '../types';
 
 interface Args {
@@ -43,10 +44,10 @@ export const getUserReposTool: GitHubTool<Args> = {
   async execute(args) {
     const sort = args.sort ?? 'updated';
     const limit = Math.min(args.limit ?? 10, 30);
-    const username = process.env.GITHUB_USERNAME;
+    const { username, token } = getGitHubConfig();
 
-    const data = (await githubFetch(
-      `/users/${username}/repos?sort=${sort}&per_page=${limit}&type=public`,
+const data = (await githubFetch(
+      `/users/${username}/repos?sort=${sort}&per_page=${limit}&type=public`, token,
     )) as any[];
 
     return data.map<Repo>((r) => ({

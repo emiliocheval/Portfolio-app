@@ -1,4 +1,5 @@
 import { githubFetch } from '../github-client';
+import { getGitHubConfig } from '../github-config';
 import type { GitHubTool } from '../types';
 
 interface Args {
@@ -36,11 +37,11 @@ export const getRecentCommitsTool: GitHubTool<Args> = {
   },
 
   async execute(args) {
-    const username = process.env.GITHUB_USERNAME;
+    const { username, token } = getGitHubConfig();
     const limit = Math.min(args.limit ?? 10, 20);
 
     const data = (await githubFetch(
-      `/repos/${username}/${args.repo}/commits?per_page=${limit}`,
+      `/repos/${username}/${args.repo}/commits?per_page=${limit}`, token,
     )) as any[];
 
     return data.map<Commit>((c) => ({

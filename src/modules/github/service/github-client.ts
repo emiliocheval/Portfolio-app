@@ -2,9 +2,7 @@ import { GitHubAPIError } from './types';
 
 const GITHUB_API = 'https://api.github.com';
 
-export async function githubFetch(path: string): Promise<unknown> {
-  const token = process.env.GITHUB_TOKEN;
-
+export async function githubFetch(path: string, token?: string): Promise<unknown> {
   const res = await fetch(`${GITHUB_API}${path}`, {
     headers: {
       ...(token ? { Authorization: `Bearer ${token}` } : {}),

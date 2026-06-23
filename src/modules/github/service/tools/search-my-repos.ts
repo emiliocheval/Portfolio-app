@@ -1,4 +1,5 @@
 import { githubFetch } from '../github-client';
+import { getGitHubConfig } from '../github-config';
 import type { GitHubTool } from '../types';
 
 interface Args {
@@ -32,10 +33,10 @@ export const searchMyReposTool: GitHubTool<Args> = {
   },
 
   async execute(args) {
-    const username = process.env.GITHUB_USERNAME;
+    const { username, token } = getGitHubConfig();
     const q = encodeURIComponent(`${args.query} user:${username}`);
 
-    const data = (await githubFetch(`/search/repositories?q=${q}&sort=updated&per_page=10`)) as {
+    const data = (await githubFetch(`/search/repositories?q=${q}&sort=updated&per_page=10`, token)) as {
       total_count: number;
       items: any[];
     };

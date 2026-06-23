@@ -1,4 +1,5 @@
 import { githubFetch } from '../github-client';
+import { getGitHubConfig } from '../github-config';
 import type { GitHubTool } from '../types';
 
 interface Args {
@@ -23,8 +24,8 @@ export const getRepoReadmeTool: GitHubTool<Args> = {
   },
 
   async execute(args) {
-    const username = process.env.GITHUB_USERNAME;
-    const data = (await githubFetch(`/repos/${username}/${args.repo}/readme`)) as {
+    const { username, token } = getGitHubConfig();
+    const data = (await githubFetch(`/repos/${username}/${args.repo}/readme`, token)) as {
       content: string;
       encoding: string;
     };

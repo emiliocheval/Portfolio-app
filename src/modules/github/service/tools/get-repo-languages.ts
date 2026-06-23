@@ -1,4 +1,5 @@
 import { githubFetch } from '../github-client';
+import { getGitHubConfig } from '../github-config';
 import type { GitHubTool } from '../types';
 
 interface Args {
@@ -23,9 +24,9 @@ export const getRepoLanguagesTool: GitHubTool<Args> = {
   },
 
   async execute(args) {
-    const username = process.env.GITHUB_USERNAME;
+    const { username, token } = getGitHubConfig();
     const data = (await githubFetch(
-      `/repos/${username}/${args.repo}/languages`,
+      `/repos/${username}/${args.repo}/languages`, token,
     )) as Record<string, number>;
 
     const total = Object.values(data).reduce((sum, n) => sum + n, 0);
