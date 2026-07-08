@@ -172,12 +172,101 @@ DeepSeek responses are markdown. `react-markdown` parses them with a custom `com
 
 ---
 
+## GitHub Explorer Module
+
+A second AI-powered module: a chat surface that answers questions about Emil's public GitHub activity — repos, languages, recent commits — backed by live data, not a cached snapshot or hand-written project list.
+
+### Why it was built this way
+
+The interesting architectural problem here isn't "call the GitHub API," it's exposing one set of tools through two different surfaces without duplicating logic: a spec-compliant MCP server for any MCP client, and a fast in-process path for the portfolio's own chat widget. The tool definitions and execution logic are written once and shared by both.
+
+### Architecture
+
+```
+src/modules/github/
+├── service/
+│   ├── types.ts                # GitHubTool contract, typed error union, MCP request types
+│   ├── github-config.ts        # Reads GITHUB_USERNAME / GITHUB_TOKEN env vars
+│   ├── github-client.ts        # Thin fetch wrapper — maps HTTP status to typed errors
+│   ├── tool-registry.ts        # Single source of truth: tool list, LLM-format export, MCP registration, dispatch
+│   └── tools/
+│       ├── get-user-repos.ts
+│       ├── get-repo-readme.ts
+│       ├── get-recent-commits.ts
+│       ├── get-repo-languages.ts
+│       └── search-my-repos.ts
+├── components/
+│   └── GitHubExplorer.tsx      # Chat UI — suggested prompts, streaming bubble, markdown rendering
+└── hooks/
+    └── useGitHubChat.ts        # Stream reading, state, request cancellation
+```
+
+Each tool in `tools/` exports one object satisfying `GitHubTool`: a JSON-schema `definition` (name, description, input shape) and an `execute()` function. `tool-registry.ts` holds the single array of all tools and adapts that array to two different consumers — it is the only file that knows about both integration surfaces.
+
+### Two integration surfaces, one tool layer
+
+**`app/api/github-mcp/route.ts`** — a real MCP server. It spins up `McpServer` from the official SDK, calls `registerTools()` to bind each tool with a Zod input schema, and serves it over `WebStandardStreamableHTTPServerTransport` in stateless mode (`sessionIdGenerator: undefined`, required because Vercel functions don't hold connection state between requests). Any MCP-compliant client can talk to this endpoint — it isn't just for this portfolio's UI.
+
+**`app/api/github-assistant/route.ts`** — what the chat widget actually calls. It runs an agentic loop against DeepSeek using standard OpenAI-format function calling: `listToolsForLLM()` exports the same tool definitions in OpenAI's schema shape, and `dispatch()` executes them directly in-process via `tool-registry.ts` — no HTTP round-trip through the MCP transport. Same tools, same execution code, no protocol overhead for the one caller that doesn't need it.
+
+### Agentic loop
+
+```
+POST /api/github-assistant {message, history}
+        │
+        ▼
+messages = [system, ...history, user]
+        │
+        ▼
+loop (max 5 iterations):
+        │  chat.completions.create({ tools, tool_choice })
+        │  tool_choice: 'required' on iteration 0 — forces at least one tool call
+        │                so the model can't answer from assumptions
+        │  tool_choice: 'auto' after that
+        │
+        ├── finish_reason !== 'tool_calls' → break, ready to answer
+        │
+        ▼ finish_reason === 'tool_calls'
+        push assistant message (tool call request)
+        execute all tool_calls in parallel via dispatch()
+        push tool results
+        │
+        └── loop again
+        ▼
+final call: stream: true → token stream returned to client
+```
+
+Forcing `tool_choice: 'required'` on the first iteration exists because the model would otherwise sometimes answer generically ("Emil builds web apps") instead of pulling live data — the fix makes at least one real tool call mandatory before any answer can be produced.
+
+### Error handling
+
+`github-client.ts` maps GitHub's HTTP responses to a typed `GitHubErrorType` union (`rate_limited`, `not_found`, `auth_failed`, `network_error`, `empty_result`) via `GitHubAPIError`. Both integration surfaces catch this the same way — `formatGitHubError()` turns it into a user-readable string instead of leaking a raw exception into the chat.
+
+### System prompt constraints
+
+Unlike the assistant module (which is conversational), this module's system prompt deliberately restricts output to a fixed **Dataset / Facts / Observations / Insight** format and bans inferential language ("actively building", "tends to", "he is"). The goal is a data layer that reports what the GitHub API actually returned, not a personality profiler — any conclusion has to be traceable to fetched data.
+
+### Key decisions
+
+| Decision | Reasoning |
+|---|---|
+| Tool definitions/execution live in one array (`tool-registry.ts`) | Both the MCP server and the direct-dispatch path read from the same source — no drift between what each surface can do |
+| MCP route is stateless (`sessionIdGenerator: undefined`) | Vercel functions are request-scoped; a session-based transport would break across invocations |
+| Chat widget bypasses the MCP transport | The widget and the API route ship together — there's no reason to pay HTTP + protocol overhead to call yourself |
+| `tool_choice: 'required'` on the first loop iteration | Prevents the model from answering from prior knowledge instead of live data |
+| Errors typed as a discriminated union, not strings | Every failure mode (rate limit, 404, auth) is handled explicitly and exhaustively at the call site |
+| Output format constrained via system prompt | Keeps the module's tone as a data layer, not a career-coach chatbot — distinct from the assistant module's voice |
+
+---
+
 ## Project structure
 
 ```
 src/
 ├── app/
-│   ├── api/assistant/route.ts  # Only Next.js boundary for the AI module
+│   ├── api/assistant/route.ts         # Only Next.js boundary for the assistant module
+│   ├── api/github-assistant/route.ts  # Chat widget's backend (direct dispatch, agentic loop)
+│   ├── api/github-mcp/route.ts        # Spec-compliant MCP server endpoint
 │   ├── layout.tsx
 │   ├── page.tsx
 │   └── globals.css
@@ -186,7 +275,8 @@ src/
 │   ├── portfolio-data.ts       # All content as typed data
 │   └── tech-icons.tsx
 └── modules/
-    └── assistant/              # Self-contained AI module (see above)
+    ├── assistant/              # Self-contained AI module (see above)
+    └── github/                 # GitHub explorer module (see above)
 ```
 
 ## Scripts
